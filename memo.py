@@ -6,6 +6,8 @@ subparsers = parser.add_subparsers(dest="command", required=True)
 add_parser = subparsers.add_parser("add", help="メモを追加する")
 add_parser.add_argument("memo", help="追加するメモの内容")
 
+list_parser = subparsers.add_parser("list", help="メモ一覧を表示する")
+
 args = parser.parse_args()
 
 if args.command == "add":
@@ -15,3 +17,17 @@ if args.command == "add":
     with open("memo.txt", "a", encoding="utf-8") as f:
         f.write(memo_content + "\n")
     print("メモを追加しました。")
+elif args.command == "list":
+    try:
+        with open("memo.txt", "r", encoding="utf-8") as f:
+            memos = f.readlines()
+        if not memos:
+            print("メモはまだありません。")
+        else:
+            with open("memo.txt", "r", encoding="utf-8") as f:
+                
+                print("メモ一覧:")
+                for i, memo in enumerate(memos, start=1):
+                    print(f"{i}. {memo.rstrip('\n')}")
+    except FileNotFoundError:
+        print("メモファイルが見つかりません。")
