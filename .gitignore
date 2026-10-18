@@ -1,0 +1,7 @@
+# メモのデータ(個人のデータなのでリポジトリに含めない)
+memo.txt
+
+# Python
+__pycache__/
+*.pyc
+.venv/

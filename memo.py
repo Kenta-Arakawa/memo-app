@@ -1,14 +1,17 @@
-import sys
+import argparse
 
-def function_check(args):
-    if len(args) < 3:
-        return "Not enough arguments"
-    
-    # コマンドによって処理を変更
-    if args[1] == "add":
-        return args[2]
-    else:
-        return "Invalid operation"
+parser = argparse.ArgumentParser(description="メモアプリ")
+subparsers = parser.add_subparsers(dest="command", required=True)
+
+add_parser = subparsers.add_parser("add", help="メモを追加する")
+add_parser.add_argument("memo", type = str, help="追加するメモの内容")
 
 
-print(function_check(sys.argv))
+
+args = parser.parse_args()
+
+if args.command == "add":
+    memo_content = args.memo
+    with open("memo.txt", "a", encoding="utf-8") as f:
+        f.write(memo_content + "\n")
+    print("メモを追加しました。")
