@@ -24,10 +24,8 @@ elif args.command == "list":
         if not memos:
             print("メモはまだありません。")
         else:
-            with open("memo.txt", "r", encoding="utf-8") as f:
-                
-                print("メモ一覧:")
-                for i, memo in enumerate(memos, start=1):
-                    print(f"{i}. {memo.rstrip('\n')}")
+            print("メモ一覧:")
+            for i, memo in enumerate(memos, start=1):
+                print(f"{i}. {memo.rstrip('\n')}")
     except FileNotFoundError:
         print("メモファイルが見つかりません。")
