@@ -1,5 +1,14 @@
 import argparse
 
+
+def load_memos(file_path):
+    """
+    memo.txtを読み込み、メモのリストを返す
+    """
+    with open(file_path, mode="r", encoding="utf-8") as f:
+        memos = f.readlines()
+    return memos
+
 parser = argparse.ArgumentParser(description="メモアプリ")
 subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -19,8 +28,7 @@ if args.command == "add":
     print("メモを追加しました。")
 elif args.command == "list":
     try:
-        with open("memo.txt", "r", encoding="utf-8") as f:
-            memos = f.readlines()
+        memos = load_memos("memo.txt")
         if not memos:
             print("メモはまだありません。")
         else:
