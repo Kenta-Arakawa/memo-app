@@ -70,3 +70,23 @@ elif args.command == "search":
                     print(f"{i}. {memo.rstrip('\n')}")
     except FileNotFoundError:
         print("メモファイルが見つかりません。")
+# メモの削除
+elif args.command == "delete":
+    try:
+        memos = load_memos("memo.txt")
+        if not memos:
+            print("メモはまだありません。")
+        else:
+            try:
+                index = int(args.index)
+                if index < 1 or index > len(memos):
+                    delete_parser.error(f"番号{index}のメモはありません。")
+                else:
+                    deleted_memo = memos.pop(index - 1)
+                    with open("memo.txt", "w", encoding="utf-8") as f:
+                        f.writelines(memos)
+                    print(f"{deleted_memo.rstrip('\n')}を削除しました。")
+            except ValueError:
+                delete_parser.error("削除するメモの番号は整数で指定してください。")
+    except FileNotFoundError:
+        print("メモファイルが見つかりません。")
