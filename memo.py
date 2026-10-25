@@ -29,7 +29,6 @@ if args.command == "add":
         add_parser.error("メモの内容が空です。追加できません。")
     if "\n" in memo_content or "\r" in memo_content:
         add_parser.error("メモの内容に改行は含められません。")
-
     with open("memo.txt", "a", encoding="utf-8") as f:
         f.write(memo_content + "\n")
     print("メモを追加しました。")
@@ -58,7 +57,7 @@ elif args.command == "search":
                 if keyword.lower() in memo.lower():
                     found_memos.append((i, memo))
             if not found_memos:
-                print(f"「{keyword}」に一致するメモは見つかりませんでした。")
+                print(f"「{keyword}」を含むメモは見つかりませんでした。")
             else:
                 print(f"「{keyword}」の検索結果:")
                 for i, memo in found_memos:
