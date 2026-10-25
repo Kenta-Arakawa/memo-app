@@ -9,6 +9,7 @@ def load_memos(file_path):
         memos = f.readlines()
     return memos
 
+
 parser = argparse.ArgumentParser(description="メモアプリ")
 subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -16,6 +17,9 @@ add_parser = subparsers.add_parser("add", help="メモを追加する")
 add_parser.add_argument("memo", help="追加するメモの内容")
 
 list_parser = subparsers.add_parser("list", help="メモ一覧を表示する")
+
+search_parser = subparsers.add_parser("search", help="メモを検索する")
+search_parser.add_argument("keyword", help="検索するキーワード")
 
 args = parser.parse_args()
 
@@ -35,5 +39,26 @@ elif args.command == "list":
             print("メモ一覧:")
             for i, memo in enumerate(memos, start=1):
                 print(f"{i}. {memo.rstrip('\n')}")
+    except FileNotFoundError:
+        print("メモファイルが見つかりません。")
+elif args.command == "search":
+    keyword = args.keyword.strip()
+    if keyword == "":
+        search_parser.error("検索キーワードが空です。")
+    try:
+        memos = load_memos("memo.txt")
+        if not memos:
+            print("メモはまだありません。")
+        else:
+            found_memos = []
+            for i, memo in enumerate(memos, start=1):
+                if keyword.lower() in memo.lower():
+                    found_memos.append((i, memo))
+            if not found_memos:
+                print(f"「{keyword}」 に一致するメモは見つかりませんでした。")
+            else:
+                print(f"「{keyword}」 の検索結果:")
+                for i, memo in found_memos:
+                    print(f"{i}. {memo.rstrip('\n')}")
     except FileNotFoundError:
         print("メモファイルが見つかりません。")
