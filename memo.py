@@ -27,6 +27,9 @@ if args.command == "add":
     memo_content = args.memo.strip()
     if memo_content == "":
         add_parser.error("メモの内容が空です。追加できません。")
+    if "\n" in memo_content or "\r" in memo_content:
+        add_parser.error("メモの内容に改行は含められません。")
+
     with open("memo.txt", "a", encoding="utf-8") as f:
         f.write(memo_content + "\n")
     print("メモを追加しました。")
