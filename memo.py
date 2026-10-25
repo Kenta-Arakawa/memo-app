@@ -21,8 +21,12 @@ list_parser = subparsers.add_parser("list", help="メモ一覧を表示する")
 search_parser = subparsers.add_parser("search", help="メモを検索する")
 search_parser.add_argument("keyword", help="検索するキーワード")
 
+delete_parser = subparsers.add_parser("delete", help="メモを削除する")
+delete_parser.add_argument("index", help="削除するメモの番号")
+
 args = parser.parse_args()
 
+# メモの追加処理
 if args.command == "add":
     memo_content = args.memo.strip()
     if memo_content == "":
@@ -32,6 +36,7 @@ if args.command == "add":
     with open("memo.txt", "a", encoding="utf-8") as f:
         f.write(memo_content + "\n")
     print("メモを追加しました。")
+# メモの一覧表示処理
 elif args.command == "list":
     try:
         memos = load_memos("memo.txt")
@@ -43,6 +48,7 @@ elif args.command == "list":
                 print(f"{i}. {memo.rstrip('\n')}")
     except FileNotFoundError:
         print("メモファイルが見つかりません。")
+# メモの検索処理
 elif args.command == "search":
     keyword = args.keyword.strip()
     if keyword == "":
