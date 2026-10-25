@@ -6,6 +6,20 @@ Claude Code への指示: このファイルを読んで、ここまでの経緯
 - エンジニア初心者。Webエンジニアとして働き始めたばかり(職場では JavaScript と Python を使うらしい)
 - 目的: Linux の基本コマンド、git/GitHub、Python を実践で体系的に身につけること
 
+## 各月末までに身に着けたい能力
+# 2026.10月
+ - Linuxの基本コマンド、GitとGitHub、Pythonの基礎
+ # 11月
+  - HTTPとREST、API設計、ER図と正規化、構成図、シーケンス図、構造化ロジックの設計
+  - 前半で基本設計（API一覧、テーブル定義、構成図）、中旬でシーケンス図とエラー処理（詳細設計）、月末ではFast APIの公式チュートリアルを一通りこなせるようになる
+# 12月
+ - Fast APIとSQLiteによるAPI実装、pytestによる単体、結合テスト、PRの運用
+ - 実装し、単体テストと受入テストをpytestで自動化する
+ - AIDLC v2をもちいた開発を行う。(上記2つを経験し、ある程度身に着けてから)
+ # 2027.1月
+ - AWSコンソールでLambda, S3, Cloud Watch Logsを実際に触る。AWSを触りながらAWSの基本的な操作は一通りできるようになる。
+ - AWSを活用するうえで月5000円未満の範囲であれば課金してもいい
+
 ## 進め方の約束
 - コードの本体は私が書く。Claude はまずヒントを出し、レビューやエラーの解説をする
 - 設定ファイルなどの定型作業は Claude が雛形を作ってよい
@@ -25,7 +39,6 @@ Claude Code への指示: このファイルを読んで、ここまでの経緯
 - Windows 側には Git 2.54 と Node v24 が入っている。gh (GitHub CLI) は未導入
 - プロジェクトは Linux 側の `~/projects/memo-app` に置く
 - 作業は VS Code を WSL に接続した状態(左下に「WSL: Ubuntu」)で行う。Windows 側から `\\wsl.localhost\...` で開くと、Windows の git が「dubious ownership」エラーを出す
-- 残りの小さな片付け: リモートの `feature/1-memo-add` ブランチが未削除
 
 ## 次にやること
 1. [x] Ubuntu の初期設定: `sudo apt update && sudo apt upgrade -y`、`python3-venv` と `python3-pip` の導入
@@ -34,6 +47,7 @@ Claude Code への指示: このファイルを読んで、ここまでの経緯
 4. [x] GitHub に SSH 鍵を登録し、リポジトリを作成する(`git@github.com:Kenta-Arakawa/memo-app.git`)
 5. [x] `memo add` を実装(#1 → PR #2)、空メモを拒否(#4 → PR #5)
 6. [x] `memo list` を実装(#3 → PR #6)
-7. [ ] `memo search` を実装する(issue → `feature/<番号>-memo-search` ブランチで。ヒントは出し済み: `in` 演算子で判定、番号は list と同じものを表示する=絞り込み前に enumerate、ヒットなし/ファイルなしのメッセージ)
-8. [ ] `memo delete` を実装する
-9. [ ] フェーズ1の学んだことを README に書く
+7. [x] `memo search` を実装する(issue → `feature/<番号>-memo-search` ブランチで。ヒントは出し済み: `in` 演算子で判定、番号は list と同じものを表示する=絞り込み前に enumerate、ヒットなし/ファイルなしのメッセージ)
+8. [x] `memo delete` を実装する
+9. [x] フェーズ1の学んだことを README に書く
+10. [ ] フェーズ2:CLI とメモ操作のロジックを分離し、pytest を導入する(習得は12月想定だが、ここで触れておく)、venv もここで作る
