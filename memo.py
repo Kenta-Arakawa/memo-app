@@ -55,9 +55,9 @@ elif args.command == "search":
                 if keyword.lower() in memo.lower():
                     found_memos.append((i, memo))
             if not found_memos:
-                print(f"「{keyword}」 に一致するメモは見つかりませんでした。")
+                print(f"「{keyword}」に一致するメモは見つかりませんでした。")
             else:
-                print(f"「{keyword}」 の検索結果:")
+                print(f"「{keyword}」の検索結果:")
                 for i, memo in found_memos:
                     print(f"{i}. {memo.rstrip('\n')}")
     except FileNotFoundError:
