@@ -6,6 +6,22 @@
 
 Python 3.12 以上が必要です。メモは、コマンドを実行したフォルダの `memo.txt` に保存されます。
 
+## 開発
+
+### 準備
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+```
+
+### テストの実行
+```bash
+source .venv/bin/activate   # ターミナルを開くたびに必要
+pytest -v
+```
+
+
 ### メモを追加する
     python3 memo.py add "牛乳を買う"
 
