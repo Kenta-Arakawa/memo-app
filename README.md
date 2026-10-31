@@ -33,6 +33,20 @@ Python 3.12 以上が必要です。メモは、コマンドを実行したフ�
 
 番号は list・search で表示される番号です。削除すると、後ろのメモの番号が1つずつ繰り上がります。
 
+## 開発
+
+### 準備
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+```
+
+### テストの実行
+```bash
+source .venv/bin/activate   # ターミナルを開くたびに必要
+pytest -v
+```
 
 ## 学習ログ
 ### フェーズ0: 環境構築
