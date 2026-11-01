@@ -117,12 +117,12 @@ def main():
             if not memos:
                 print("メモはまだありません。")
             else:
-                if index < 1 or index > len(memos):
-                    delete_parser.error(f"番号{index}のメモはありません。")
-                deleted_memo = memos.pop(index - 1)
-                with open("memo.txt", "w", encoding="utf-8") as f:
-                    f.writelines(memos)
-                print(f"「{deleted_memo.rstrip('\n')}」を削除しました。")
+                try:
+                    memos, deleted_memo = delete_memo(memos, index)
+                except ValueError as e:
+                    delete_parser.error(str(e))
+                save_memos("memo.txt", memos)
+                print(f"「{deleted_memo}」を削除しました。")
         except FileNotFoundError:
             print("メモファイルが見つかりません。")
 
