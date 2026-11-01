@@ -49,6 +49,22 @@ def save_memos(file_path, memos):
         f.writelines(memos)
 
 
+def add_memo(file_path, memo):
+    """
+    メモを一件、ファイルの末尾に追加する。
+    空白のみの文字列についてはValueErrorを発生させる。
+    メモの内容に改行が含まれる場合はValueErrorを発生させる。
+    新規ファイルでも既存ファイルでもaddすることが可能。
+    """
+    memo_content = memo.strip()
+    if memo_content == "":
+        raise ValueError("メモの内容が空です。追加できません。")
+    if "\n" in memo_content or "\r" in memo_content:
+        raise ValueError("メモの内容に改行は含められません。")
+    with open(file_path, "a", encoding="utf-8") as f:
+        f.write(memo_content + "\n")
+
+
 def main():
     parser = argparse.ArgumentParser(description="メモアプリ")
     subparsers = parser.add_subparsers(dest="command", required=True)

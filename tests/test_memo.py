@@ -4,6 +4,7 @@ from memo import load_memos
 from memo import search_memos
 from memo import delete_memo
 from memo import save_memos
+from memo import add_memo
 
 
 def test_load_memos_returns_lines(tmp_path):
@@ -99,3 +100,39 @@ def test_save_memos(tmp_path):
     save_memos(file_path, memos)
     # load_memosでそのファイルを読み返すと、準備したリストと同じになる
     assert load_memos(file_path) == memos
+
+
+def test_add_memo_new_file(tmp_path):
+    # 準備：ファイルパスを作成する
+    file_path = tmp_path/"memo.txt"
+    # 実行
+    add_memo(file_path, "牛乳を買う")
+    # 確認
+    assert load_memos(file_path) == ["牛乳を買う\n"]
+
+
+def test_add_memo_existing_file(tmp_path):
+    file_path = tmp_path/"memo.txt"
+    file_path.write_text("卵を買う\n", encoding="utf-8")
+    add_memo(file_path, "牛乳を買う")
+    assert load_memos(file_path) == ["卵を買う\n", "牛乳を買う\n"]
+
+
+def test_add_memo_trim(tmp_path):
+    file_path = tmp_path/"memo.txt"
+    add_memo(file_path, "　牛乳を買う ")
+    assert load_memos(file_path) == ["牛乳を買う\n"]
+
+
+def test_add_memo_no_words(tmp_path):
+    file_path = tmp_path/"memo.txt"
+    with pytest.raises(ValueError, match="メモの内容が空です。追加できません。"):
+        add_memo(file_path, "　")
+    assert not file_path.exists()
+
+
+def test_add_memo_with_n(tmp_path):
+    file_path = tmp_path/"memo.txt"
+    with pytest.raises(ValueError, match="メモの内容に改行は含められません。"):
+        add_memo(file_path, "牛乳\n卵")
+    assert not file_path.exists()
