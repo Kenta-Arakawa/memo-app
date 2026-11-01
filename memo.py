@@ -1,13 +1,71 @@
 import argparse
 
 
+MEMO_FILE = "memo.txt"
+
+
 def load_memos(file_path):
     """
-    memo.txtを読み込み、メモのリストを返す
+    指定しているファイルを読み込み、メモのリストを返す
     """
     with open(file_path, mode="r", encoding="utf-8") as f:
         memos = f.readlines()
     return memos
+
+
+def search_memos(memos, keyword):
+    """
+    メモのリストから、キーワードを含むメモを探す。
+    大文字、小文字は区別しない。
+    （番号, メモ）のリストを返す。番号は1から始まる行番号。
+    キーワードが空（空白だけを含む）の時はValueErrorを発生させる。
+    """
+    search_word = keyword.strip()
+    if search_word == "":
+        raise ValueError("検索キーワードが空です。")
+    found_memos = []
+    for i, memo in enumerate(memos, start=1):
+        if search_word.lower() in memo.lower():
+            found_memos.append((i, memo.rstrip('\n')))
+    return found_memos
+
+
+def delete_memo(memos, index):
+    """
+    メモのリストから指定した番号（１から始まる）のメモの内容を削除する。
+    リストの範囲外を指定するインデックスに対してはValueErrorを発生させる。
+    (残りのメモのリスト, 削除したメモ)を返す。
+    """
+    if index < 1 or index > len(memos):
+        raise ValueError(f"番号{index}のメモはありません。")
+    new_memos = memos[:index-1] + memos[index:]
+    deleted_memo = memos[index-1].rstrip('\n')
+    return new_memos, deleted_memo
+
+
+def save_memos(file_path, memos):
+    """
+    メモのリストを、指定したファイルに書き込む（上書き）。
+    各メモの末尾には改行がついている前提。
+    """
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.writelines(memos)
+
+
+def add_memo(file_path, memo):
+    """
+    メモを一件、ファイルの末尾に追加する。
+    空白のみの文字列についてはValueErrorを発生させる。
+    メモの内容に改行が含まれる場合はValueErrorを発生させる。
+    新規ファイルでも既存ファイルでもaddすることが可能。
+    """
+    memo_content = memo.strip()
+    if memo_content == "":
+        raise ValueError("メモの内容が空です。追加できません。")
+    if "\n" in memo_content or "\r" in memo_content:
+        raise ValueError("メモの内容に改行は含められません。")
+    with open(file_path, "a", encoding="utf-8") as f:
+        f.write(memo_content + "\n")
 
 
 def main():
@@ -29,18 +87,15 @@ def main():
 
     # メモの追加処理
     if args.command == "add":
-        memo_content = args.memo.strip()
-        if memo_content == "":
-            add_parser.error("メモの内容が空です。追加できません。")
-        if "\n" in memo_content or "\r" in memo_content:
-            add_parser.error("メモの内容に改行は含められません。")
-        with open("memo.txt", "a", encoding="utf-8") as f:
-            f.write(memo_content + "\n")
+        try:
+            add_memo(MEMO_FILE, args.memo)
+        except ValueError as e:
+            add_parser.error(str(e))
         print("メモを追加しました。")
     # メモの一覧表示処理
     elif args.command == "list":
         try:
-            memos = load_memos("memo.txt")
+            memos = load_memos(MEMO_FILE)
             if not memos:
                 print("メモはまだありません。")
             else:
@@ -55,20 +110,16 @@ def main():
         if keyword == "":
             search_parser.error("検索キーワードが空です。")
         try:
-            memos = load_memos("memo.txt")
+            memos = load_memos(MEMO_FILE)
+            found_memos = search_memos(memos, keyword)
             if not memos:
                 print("メモはまだありません。")
+            elif not found_memos:
+                print(f"「{keyword}」を含むメモは見つかりませんでした。")
             else:
-                found_memos = []
-                for i, memo in enumerate(memos, start=1):
-                    if keyword.lower() in memo.lower():
-                        found_memos.append((i, memo))
-                if not found_memos:
-                    print(f"「{keyword}」を含むメモは見つかりませんでした。")
-                else:
-                    print(f"「{keyword}」の検索結果:")
-                    for i, memo in found_memos:
-                        print(f"{i}. {memo.rstrip('\n')}")
+                print(f"「{keyword}」の検索結果:")
+                for i, memo in found_memos:
+                    print(f"{i}. {memo}")
         except FileNotFoundError:
             print("メモファイルが見つかりません。")
     # メモの削除
@@ -78,16 +129,16 @@ def main():
         except ValueError:
             delete_parser.error("削除するメモの番号は整数で指定してください。")
         try:
-            memos = load_memos("memo.txt")
+            memos = load_memos(MEMO_FILE)
             if not memos:
                 print("メモはまだありません。")
             else:
-                if index < 1 or index > len(memos):
-                    delete_parser.error(f"番号{index}のメモはありません。")
-                deleted_memo = memos.pop(index - 1)
-                with open("memo.txt", "w", encoding="utf-8") as f:
-                    f.writelines(memos)
-                print(f"「{deleted_memo.rstrip('\n')}」を削除しました。")
+                try:
+                    memos, deleted_memo = delete_memo(memos, index)
+                except ValueError as e:
+                    delete_parser.error(str(e))
+                save_memos(MEMO_FILE, memos)
+                print(f"「{deleted_memo}」を削除しました。")
         except FileNotFoundError:
             print("メモファイルが見つかりません。")
 
