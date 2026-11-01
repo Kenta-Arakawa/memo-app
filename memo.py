@@ -84,13 +84,10 @@ def main():
 
     # メモの追加処理
     if args.command == "add":
-        memo_content = args.memo.strip()
-        if memo_content == "":
-            add_parser.error("メモの内容が空です。追加できません。")
-        if "\n" in memo_content or "\r" in memo_content:
-            add_parser.error("メモの内容に改行は含められません。")
-        with open("memo.txt", "a", encoding="utf-8") as f:
-            f.write(memo_content + "\n")
+        try:
+            add_memo("memo.txt", args.memo)
+        except ValueError as e:
+            add_parser.error(str(e))
         print("メモを追加しました。")
     # メモの一覧表示処理
     elif args.command == "list":
