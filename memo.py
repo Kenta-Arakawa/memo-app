@@ -10,6 +10,23 @@ def load_memos(file_path):
     return memos
 
 
+def search_memos(memos, keyword):
+    """
+    メモのリストから、キーワードを含むメモを探す。
+    大文字、小文字は区別しない。
+    （番号, メモ）のリストを返す。番号は1から始まる行番号。
+    キーワードが空（空白だけを含む）の時はValueErrorを発生させる。
+    """
+    search_word = keyword.strip()
+    if search_word == "":
+        raise ValueError("検索キーワードが空です。")
+    found_memos = []
+    for i, memo in enumerate(memos, start=1):
+        if search_word.lower() in memo.lower():
+            found_memos.append((i, memo.rstrip('\n')))
+    return found_memos
+
+
 def main():
     parser = argparse.ArgumentParser(description="メモアプリ")
     subparsers = parser.add_subparsers(dest="command", required=True)
