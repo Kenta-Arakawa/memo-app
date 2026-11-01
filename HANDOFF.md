@@ -50,4 +50,20 @@ Claude Code への指示: このファイルを読んで、ここまでの経緯
 7. [x] `memo search` を実装する(issue → `feature/<番号>-memo-search` ブランチで。ヒントは出し済み: `in` 演算子で判定、番号は list と同じものを表示する=絞り込み前に enumerate、ヒットなし/ファイルなしのメッセージ)
 8. [x] `memo delete` を実装する
 9. [x] フェーズ1の学んだことを README に書く
-10. [ ] フェーズ2:CLI とメモ操作のロジックを分離し、pytest を導入する(習得は12月想定だが、ここで触れておく)、venv もここで作る
+10. [x] フェーズ2:CLI とメモ操作のロジックを分離し、pytest を導入する(venv・pytest 導入 #14 → PR #15、関数の分離と TDD #16 → PR #17、学習ログ PR #19)
+    - memo.py は「main() = 引数・表示・エラー表示」「関数 = 処理(print しない)」に分かれた。関数: `load_memos` / `search_memos` / `delete_memo` / `save_memos` / `add_memo`、ファイル名は定数 `MEMO_FILE`
+    - テストは `tests/test_memo.py` に 19 件。main() のテストはまだない(別 issue にした。12月の結合テストで扱う)
+    - 空キーワードのチェックが main() と `search_memos` の2か所にあるのは意図的(main() 側は「ファイルを読む前に入力を確かめる」役割)
+
+### フェーズ3の準備(11月):設計と HTTP/REST
+11. [ ] HTTP と REST の基礎:リクエスト / レスポンス、メソッド(GET / POST / PUT / DELETE)、ステータスコード、JSON。`curl` で公開 API を叩いて確かめる
+12. [ ] memo-app の API 一覧を作る(CLI の add / list / search / delete を、URL・メソッド・ステータスコードに対応させる)
+13. [ ] ER 図とテーブル定義(メモに id・作成日時などを持たせる。正規化の考え方)
+14. [ ] 構成図とシーケンス図(正常系とエラー系)、エラー処理の方針
+15. [ ] FastAPI の公式チュートリアルを一通り進める(月末)
+16. [ ] 12月:設計をもとに FastAPI + SQLite で実装し、pytest で単体・結合テストを書く(main() の結合テストの issue もここで扱う)
+
+## 作業上の注意
+- SSH 鍵にパスフレーズがあるので、push / fetch / pull はユーザーが行う
+- 動作確認は本物の memo.txt を使わず、一時フォルダで行う
+- pytest が緑でも CLI が壊れることがある(main() はテストされていない)。main() を変えたら CLI でも確認する
