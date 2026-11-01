@@ -1,9 +1,12 @@
 import argparse
 
 
+MEMO_FILE = "memo.txt"
+
+
 def load_memos(file_path):
     """
-    memo.txtを読み込み、メモのリストを返す
+    "memo.txt"を読み込み、メモのリストを返す
     """
     with open(file_path, mode="r", encoding="utf-8") as f:
         memos = f.readlines()
@@ -85,14 +88,14 @@ def main():
     # メモの追加処理
     if args.command == "add":
         try:
-            add_memo("memo.txt", args.memo)
+            add_memo(MEMO_FILE, args.memo)
         except ValueError as e:
             add_parser.error(str(e))
         print("メモを追加しました。")
     # メモの一覧表示処理
     elif args.command == "list":
         try:
-            memos = load_memos("memo.txt")
+            memos = load_memos(MEMO_FILE)
             if not memos:
                 print("メモはまだありません。")
             else:
@@ -107,7 +110,7 @@ def main():
         if keyword == "":
             search_parser.error("検索キーワードが空です。")
         try:
-            memos = load_memos("memo.txt")
+            memos = load_memos(MEMO_FILE)
             found_memos = search_memos(memos, keyword)
             if not memos:
                 print("メモはまだありません。")
@@ -126,7 +129,7 @@ def main():
         except ValueError:
             delete_parser.error("削除するメモの番号は整数で指定してください。")
         try:
-            memos = load_memos("memo.txt")
+            memos = load_memos(MEMO_FILE)
             if not memos:
                 print("メモはまだありません。")
             else:
@@ -134,7 +137,7 @@ def main():
                     memos, deleted_memo = delete_memo(memos, index)
                 except ValueError as e:
                     delete_parser.error(str(e))
-                save_memos("memo.txt", memos)
+                save_memos(MEMO_FILE, memos)
                 print(f"「{deleted_memo}」を削除しました。")
         except FileNotFoundError:
             print("メモファイルが見つかりません。")
