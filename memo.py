@@ -6,7 +6,7 @@ MEMO_FILE = "memo.txt"
 
 def load_memos(file_path):
     """
-    "memo.txt"を読み込み、メモのリストを返す
+    指定しているファイルを読み込み、メモのリストを返す
     """
     with open(file_path, mode="r", encoding="utf-8") as f:
         memos = f.readlines()
