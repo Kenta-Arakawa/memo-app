@@ -2,6 +2,8 @@ import pytest
 
 from memo import load_memos
 from memo import search_memos
+from memo import delete_memo
+from memo import save_memos
 
 
 def test_load_memos_returns_lines(tmp_path):
@@ -67,3 +69,33 @@ def test_search_memos_no_match():
     result = search_memos(["卵を買う\n", "牛乳を買う\n", "牛乳パックを捨てる\n"], "りんご")
     assert result == []
 
+
+def test_delete_memo_middle_delete():
+    remaining, deleted = delete_memo(["卵を買う\n", "牛乳を買う\n", "Pythonの勉強\n"], 2)
+    assert remaining == ["卵を買う\n", "Pythonの勉強\n"]
+    assert deleted == "牛乳を買う"
+
+
+def test_delete_memo_zero_delete():
+    with pytest.raises(ValueError, match="番号0のメモはありません。"):
+        delete_memo(["卵を買う\n", "牛乳を買う\n", "Pythonの勉強\n"], 0)
+
+
+def test_delete_memo_over_number():
+    with pytest.raises(ValueError, match="番号4のメモはありません。"):
+        delete_memo(["卵を買う\n", "牛乳を買う\n", "Pythonの勉強\n"], 4)
+
+
+def test_delete_memo_minus():
+    with pytest.raises(ValueError, match="番号-1のメモはありません。"):
+        delete_memo(["卵を買う\n", "牛乳を買う\n", "Pythonの勉強\n"], -1)
+
+
+def test_save_memos(tmp_path):
+    # 書き込むメモのリストとファイルのパスを用意する
+    file_path = tmp_path/"memo.txt"
+    memos = ["卵を買う\n", "牛乳を買う\n"]
+    # save_memosにパスとリストを渡して、ファイルに書き込む
+    save_memos(file_path, memos)
+    # load_memosでそのファイルを読み返すと、準備したリストと同じになる
+    assert load_memos(file_path) == memos

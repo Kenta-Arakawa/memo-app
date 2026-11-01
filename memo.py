@@ -27,6 +27,28 @@ def search_memos(memos, keyword):
     return found_memos
 
 
+def delete_memo(memos, index):
+    """
+    メモのリストから指定した番号（１から始まる）のメモの内容を削除する。
+    リストの範囲外を指定するインデックスに対してはValueErrorを発生させる。
+    (残りのメモのリスト, 削除したメモ)を返す。
+    """
+    if index < 1 or index > len(memos):
+        raise ValueError(f"番号{index}のメモはありません。")
+    new_memos = memos[:index - 1] + memos[index:]
+    deleted_memo = memos[index -  1].rstrip('\n')
+    return new_memos, deleted_memo
+
+
+def save_memos(file_path, memos):
+    """
+    メモのリストを、指定したファイルに書き込む（上書き）。
+    各メモの末尾には改行がついている前提。
+    """
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.writelines(memos)
+
+
 def main():
     parser = argparse.ArgumentParser(description="メモアプリ")
     subparsers = parser.add_subparsers(dest="command", required=True)
