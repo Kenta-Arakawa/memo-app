@@ -73,19 +73,15 @@ def main():
             search_parser.error("検索キーワードが空です。")
         try:
             memos = load_memos("memo.txt")
+            found_memos = search_memos(memos, keyword)
             if not memos:
                 print("メモはまだありません。")
+            elif not found_memos:
+                print(f"「{keyword}」を含むメモは見つかりませんでした。")
             else:
-                found_memos = []
-                for i, memo in enumerate(memos, start=1):
-                    if keyword.lower() in memo.lower():
-                        found_memos.append((i, memo))
-                if not found_memos:
-                    print(f"「{keyword}」を含むメモは見つかりませんでした。")
-                else:
-                    print(f"「{keyword}」の検索結果:")
-                    for i, memo in found_memos:
-                        print(f"{i}. {memo.rstrip('\n')}")
+                print(f"「{keyword}」の検索結果:")
+                for i, memo in found_memos:
+                    print(f"{i}. {memo}")
         except FileNotFoundError:
             print("メモファイルが見つかりません。")
     # メモの削除
