@@ -85,7 +85,7 @@ pytest -v
 ### フェーズ2: ロジックの分離とpytest(2026年10月~11月)
 #### Python
 - venvとpip、requirements-dev.txt
-- if __name__ == "__main__": を書く理由（pytestでimportしたときのINTERNALERROR）
+- 'if __name__ == "__main__":' を書く理由（pytestでimportしたときのINTERNALERROR）
 - 関数から raise ValueErrorして、main()でexcept ValueError as e → parser.error(str(e))
 - タプルを返す/受け取る（remaining, deleted = hogehoge）
 - popはもとのリストを変えてしまう　→　スライスで新しいリストを作る
