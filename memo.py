@@ -38,8 +38,8 @@ def delete_memo(memos, index):
     """
     if index < 1 or index > len(memos):
         raise ValueError(f"番号{index}のメモはありません。")
-    new_memos = memos[:index - 1] + memos[index:]
-    deleted_memo = memos[index -  1].rstrip('\n')
+    new_memos = memos[:index-1] + memos[index:]
+    deleted_memo = memos[index-1].rstrip('\n')
     return new_memos, deleted_memo
 
 
