@@ -82,35 +82,35 @@ pytest -v
  - try / except の位置を間違えて SyntaxError になった
 
 
-### フェーズ2: ロジックの分離とpytest(202610~11月)
-### Python
+### フェーズ2: ロジックの分離とpytest(2026年10月~11月)
+#### Python
 - venvとpip、requirements-dev.txt
-- if __name_ == "__main__": を書く理由（pytestでimportしたときのINTERNALERROR）
+- if __name__ == "__main__": を書く理由（pytestでimportしたときのINTERNALERROR）
 - 関数から raise ValueErrorして、main()でexcept ValueError as e → parser.error(str(e))
 - タプルを返す/受け取る（remaining, deleted = hogehoge）
 - popはもとのリストを変えてしまう　→　スライスで新しいリストを作る
 - openのモード（"r"は読み込み, "a"は追記、"w"は上書き）
 - 定数は全部大文字（MEMO_FILE）
 
-### pytest/テスト
+#### pytest/テスト
 - testで始まる関数、assert, tmp_path, pytest.raises(hogehoge, match="hogehoge")
 - TDD(赤→緑→リファクタリング)と、「正しい理由で赤になっているか」を確かめること
 - 返り値だけでなく、本来の仕事（ファイルの中身）を確かめる
 - pytestが緑でも、main()のミスは見つからない（3回あった）
 
-### git
-- git add -pでコミットを分ける（今回、実際に2回起こった）
+#### git
+- git add -pでコミットを分ける（今回、実際に2回使った）
 - 「関数とテスト」→「mainで使う」の順でコミットを並べる
 - PRを作った後も、pushすればコミットが追加される
 
 
-### レビュー
-- 「このPRを直すもの」と「別のIssueにするもの」を分ける
+#### レビュー
+- 「このPRで直すもの」と「別のIssueにするもの」を分ける
 - 重複に見えるコードにも、別の役割があることがある（空のキーワードのチェック）
 - 一括置換をしたら、git diffで全部確認する
 
-### 躓いたこと
-- 関数名のtライプミス
+#### 躓いたこと
+- 関数名のタイプミス
 - \nと/nの打ち間違い
 - コミットしたつもりができていなかった
 - pytestのtestファイルについて、from hogehoge import~~を書き忘れる
