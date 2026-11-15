@@ -56,14 +56,20 @@ Claude Code への指示: このファイルを読んで、ここまでの経緯
     - 空キーワードのチェックが main() と `search_memos` の2か所にあるのは意図的(main() 側は「ファイルを読む前に入力を確かめる」役割)
 
 ### フェーズ3の準備(11月):設計と HTTP/REST
-11. [ ] HTTP と REST の基礎:リクエスト / レスポンス、メソッド(GET / POST / PUT / DELETE)、ステータスコード、JSON。`curl` で公開 API を叩いて確かめる
-12. [ ] memo-app の API 一覧を作る(CLI の add / list / search / delete を、URL・メソッド・ステータスコードに対応させる)
-13. [ ] ER 図とテーブル定義(メモに id・作成日時などを持たせる。正規化の考え方)
-14. [ ] 構成図とシーケンス図(正常系とエラー系)、エラー処理の方針
+11. [x] HTTP と REST の基礎:JSONPlaceholder に curl(`-i` / `-v`)を送り、リクエスト・レスポンスの形(1行目・ヘッダー・ボディ)とステータスコードを確かめた
+12. [x] memo-app の API 一覧を作る(#21 → PR #22、`docs/api.md`)
+13. [x] テーブル定義と ER 図(#23 → PR #24、`docs/db.md`)。memos は id・content(200文字まで)・created_at。作成者・論理削除は今は作らない
+14. [x] 構成図とシーケンス図、エラー処理の方針(#25 → PR #26、`docs/design.md`、Mermaid で記述)
 15. [ ] FastAPI の公式チュートリアルを一通り進める(月末)
+    - 練習用フォルダ `~/projects/fastapi-tutorial`(git 管理していない。venv に fastapi[standard] と pytest)
+    - 済:最初のステップ、パスパラメータ、クエリパラメータ、リクエストボディ、テスト(TestClient で 7 件)
+    - main.py に `GET /memos`(keyword の有無で一覧 / 検索、空は 422)と `POST /memos`(空・空白・改行は自分で 422、200文字は `Field(max_length=200)`)を練習として作った
+    - 気づいたこと:自動チェックの 422(`detail` がリスト)と、自分で書いた 422(`detail` が文字列)でボディの形が違う
+    - 次:エラーハンドリング(422 の形をそろえる)、レスポンスモデル
 16. [ ] 12月:設計をもとに FastAPI + SQLite で実装し、pytest で単体・結合テストを書く(main() の結合テストの issue もここで扱う)
 
 ## 作業上の注意
 - SSH 鍵にパスフレーズがあるので、push / fetch / pull はユーザーが行う
 - 動作確認は本物の memo.txt を使わず、一時フォルダで行う
 - pytest が緑でも CLI が壊れることがある(main() はテストされていない)。main() を変えたら CLI でも確認する
+- FastAPI のサーバーは Ctrl+C で止める(Ctrl+Z だと残って `Address already in use` になる)。curl が返らない・500 が出たら、まずサーバー側のターミナルを見る
