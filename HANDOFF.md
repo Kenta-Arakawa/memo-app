@@ -60,12 +60,15 @@ Claude Code への指示: このファイルを読んで、ここまでの経緯
 12. [x] memo-app の API 一覧を作る(#21 → PR #22、`docs/api.md`)
 13. [x] テーブル定義と ER 図(#23 → PR #24、`docs/db.md`)。memos は id・content(200文字まで)・created_at。作成者・論理削除は今は作らない
 14. [x] 構成図とシーケンス図、エラー処理の方針(#25 → PR #26、`docs/design.md`、Mermaid で記述)
-15. [ ] FastAPI の公式チュートリアルを一通り進める(月末)
+15. [x] FastAPI の公式チュートリアルを一通り進める(11/22 完了)
     - 練習用フォルダ `~/projects/fastapi-tutorial`(git 管理していない。venv に fastapi[standard] と pytest)
-    - 済:最初のステップ、パスパラメータ、クエリパラメータ、リクエストボディ、テスト(TestClient で 7 件)
-    - main.py に `GET /memos`(keyword の有無で一覧 / 検索、空は 422)と `POST /memos`(空・空白・改行は自分で 422、200文字は `Field(max_length=200)`)を練習として作った
-    - 気づいたこと:自動チェックの 422(`detail` がリスト)と、自分で書いた 422(`detail` が文字列)でボディの形が違う
-    - 次:エラーハンドリング(422 の形をそろえる)、レスポンスモデル
+    - 済:最初のステップ、パスパラメータ、クエリパラメータ、リクエストボディ、テスト(TestClient で 7 件)、エラーハンドリング、レスポンスモデル
+    - main.py に `GET /memos`(keyword の有無で一覧 / 検索、空は 422)と `POST /memos` を練習として作った
+    - エラーハンドリング:空・空白・改行のチェックを `MemoCreate` の `@field_validator` に移し(`ValueError` を投げる)、POST /memos の 422 の detail をすべてリストにそろえた。テストを先に直して赤を確かめてから実装した(TDD)
+    - レスポンスモデル:`MemoResponse`(id・content)を `response_model=` で登録。モデルにない項目は自動で落ちる。モデルにある項目が足りないと `ResponseValidationError` で 500(サーバーのバグ、今回の場合クライアントは正しく送っているのにサーバーが約束した形を守れなかったから生じている)
+    - 役割分担:モデル = 届く / 返すデータの形を確かめる、関数 = 処理だけ(`create_memo` は return 1行)
+    - 残した課題:`GET /memos` の空キーワードは `HTTPException` のままで、`detail` が文字列。12月の実装でそろえる
+    - `created_at` は DB がないので、まだ `MemoResponse` に入れていない(12月に足す)
 16. [ ] 12月:設計をもとに FastAPI + SQLite で実装し、pytest で単体・結合テストを書く(main() の結合テストの issue もここで扱う)
 
 ## 作業上の注意
@@ -73,3 +76,5 @@ Claude Code への指示: このファイルを読んで、ここまでの経緯
 - 動作確認は本物の memo.txt を使わず、一時フォルダで行う
 - pytest が緑でも CLI が壊れることがある(main() はテストされていない)。main() を変えたら CLI でも確認する
 - FastAPI のサーバーは Ctrl+C で止める(Ctrl+Z だと残って `Address already in use` になる)。curl が返らない・500 が出たら、まずサーバー側のターミナルを見る
+- pytest を実行したら、最初の `rootdir:` と `collected N items` を見て、どのプロジェクトのテストかを確かめる(memo-app は 19 件、fastapi-tutorial は 7 件)。VS Code で memo-app を開いていると、ターミナルは memo-app から始まる
+- ファイルを変えたのに結果が変わらないときは、まず保存したかを確かめる
