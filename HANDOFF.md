@@ -65,7 +65,7 @@ Claude Code への指示: このファイルを読んで、ここまでの経緯
     - 済:最初のステップ、パスパラメータ、クエリパラメータ、リクエストボディ、テスト(TestClient で 7 件)、エラーハンドリング、レスポンスモデル
     - main.py に `GET /memos`(keyword の有無で一覧 / 検索、空は 422)と `POST /memos` を練習として作った
     - エラーハンドリング:空・空白・改行のチェックを `MemoCreate` の `@field_validator` に移し(`ValueError` を投げる)、POST /memos の 422 の detail をすべてリストにそろえた。テストを先に直して赤を確かめてから実装した(TDD)
-    - レスポンスモデル:`MemoResponse`(id・content)を `response_model=` で登録。モデルにない項目は自動で落ちる。モデルにある項目が足りないと `ResponseValidationError` で 500(サーバーのバグ、今回の場合クライアントは正しく送っているん井サーバーが約束した形を守れなかったから生じている)
+    - レスポンスモデル:`MemoResponse`(id・content)を `response_model=` で登録。モデルにない項目は自動で落ちる。モデルにある項目が足りないと `ResponseValidationError` で 500(サーバーのバグ、今回の場合クライアントは正しく送っているのにサーバーが約束した形を守れなかったから生じている)
     - 役割分担:モデル = 届く / 返すデータの形を確かめる、関数 = 処理だけ(`create_memo` は return 1行)
     - 残した課題:`GET /memos` の空キーワードは `HTTPException` のままで、`detail` が文字列。12月の実装でそろえる
     - `created_at` は DB がないので、まだ `MemoResponse` に入れていない(12月に足す)
